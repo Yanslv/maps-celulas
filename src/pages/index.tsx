@@ -5,8 +5,31 @@ import Map from "@/components/Map";
 type Ponto = {
   lat: number;
   lng: number;
-  title?: string;
+  nome_lider?: string;
+  nome_celula?: string;
+  bairro?: string;
+  rede?: string;
+  discipulado?: string;
+  publico_alvo?: string;
+  dia_da_semana?: string;
+  celular_lider?: string;
+  horario?: string;
   fotoUrl?: string;
+};
+
+type CelulaData = {
+  lat: string;
+  lng: string;
+  nome_lider?: string;
+  nome_celula?: string;
+  bairro?: string;
+  rede?: string;
+  discipulado?: string;
+  publico_alvo?: string;
+  dia_da_semana?: string;
+  celular_lider?: string;
+  horario?: string;
+  photo?: string;
 };
 
 export default function MapPage() {
@@ -28,7 +51,7 @@ export default function MapPage() {
       }
 
       // Mapeia os dados da tabela 'celulas' para o formato do Map
-      const pontosFormatados: Ponto[] = (data || []).map((item: any) => ({
+      const pontosFormatados: Ponto[] = (data || []).map((item: CelulaData) => ({
         lat: parseFloat(item.lat),
         lng: parseFloat(item.lng),
         nome_lider: item.nome_lider, 

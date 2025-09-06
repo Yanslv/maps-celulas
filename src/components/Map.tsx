@@ -2,6 +2,18 @@
 
 import { useEffect, useRef } from "react";
 
+// Declaração global do Google Maps
+declare global {
+  interface Window {
+    google: typeof google;
+  }
+}
+
+// Estender a interface OverlayView para incluir a propriedade div
+interface CustomOverlayView extends google.maps.OverlayView {
+  div?: HTMLDivElement;
+}
+
 type Ponto = {
   lat: number;
   lng: number;
@@ -25,9 +37,9 @@ export default function Map({ pontos }: MapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !window.google) return;
 
-    const map = new google.maps.Map(mapRef.current, {
+    const map = new window.google.maps.Map(mapRef.current, {
       zoom: 13,
       center: { lat: -15.646670, lng: -56.132500 },
     });
@@ -35,7 +47,7 @@ export default function Map({ pontos }: MapProps) {
     pontos.forEach((ponto) => {
       if (!ponto.lat || !ponto.lng) return;
 
-      const overlay = new google.maps.OverlayView();
+      const overlay = new window.google.maps.OverlayView() as CustomOverlayView;
 
       overlay.onAdd = function () {
         const div = document.createElement("div");
@@ -68,7 +80,7 @@ export default function Map({ pontos }: MapProps) {
         }
 
         // 🔥 InfoWindow com mais informações
-        const infoWindow = new google.maps.InfoWindow({
+        const infoWindow = new window.google.maps.InfoWindow({
           content: `
             <div style="max-width:200px;">
               <div style="display: flex; justify-content: center; align-items: center; box-shadow: inset 0 2px 8px rgba(0,0,0,0.53); border-radius: 16px; padding: 12px; background: #fff; margin-bottom: 8px;">
@@ -124,7 +136,7 @@ export default function Map({ pontos }: MapProps) {
 
         // Evento de clique no ícone
         div.addEventListener("click", () => {
-          infoWindow.setPosition(new google.maps.LatLng(ponto.lat, ponto.lng));
+          infoWindow.setPosition(new window.google.maps.LatLng(ponto.lat, ponto.lng));
           infoWindow.open(map);
 
           // Timeout para garantir que o DOM do InfoWindow foi renderizado
@@ -158,7 +170,7 @@ Localização: https://www.google.com/maps?q=${ponto.lat},${ponto.lng}
             if (btnWhatsapp && ponto.celular_lider) {
               btnWhatsapp.onclick = () => {
                 // Remove caracteres não numéricos do telefone
-                const numero = ponto.celular_lider.replace(/\D/g, "");
+                const numero = ponto.celular_lider!.replace(/\D/g, "");
                 const texto = encodeURIComponent(
                   `Olá ${ponto.nome_lider || ""}, gostaria de saber mais sobre a célula "${ponto.nome_celula || ""}".`
                 );
@@ -212,7 +224,7 @@ Localização: https://www.google.com/maps?q=${ponto.lat},${ponto.lng}
       overlay.draw = function () {
         if (!this.div) return;
         const projection = this.getProjection();
-        const position = new google.maps.LatLng(ponto.lat, ponto.lng);
+        const position = new window.google.maps.LatLng(ponto.lat, ponto.lng);
         const point = projection.fromLatLngToDivPixel(position);
         if (point) {
           this.div.style.left = point.x + "px";
