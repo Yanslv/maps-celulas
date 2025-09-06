@@ -199,7 +199,7 @@ Localização: https://www.google.com/maps?q=${ponto.lat},${ponto.lng}
                 if (navigator.share) {
                   try {
                     await navigator.share(shareData);
-                  } catch (e) {
+                  } catch (_) {
                     // Usuário cancelou ou erro
                   }
                 } else {
