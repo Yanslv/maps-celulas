@@ -83,7 +83,7 @@ export default function Map({ pontos }: MapProps) {
     // Cria o mapa apenas uma vez
     if (!mapInstanceRef.current) {
       mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
-        zoom: 16,
+        zoom: 14,
         center: { lat: -15.646670, lng: -56.132500 },
         styles: [
           {
