@@ -69,6 +69,9 @@ export default function MapPage() {
   const [hoverInput, setHoverInput] = useState<string | null>(null);
   const [hoverBotao, setHoverBotao] = useState(false);
 
+  // Estado para modal do gabarito
+  const [gabaritoAberto, setGabaritoAberto] = useState(false);
+
   // Ref para evitar piscar o mapa ao passar mouse nos selects
   const isFirstRender = useRef(true);
 
@@ -128,6 +131,7 @@ export default function MapPage() {
   }, [pontos, bairroFiltro, discipuladoFiltro, publicoAlvoFiltro, diaSemanaFiltro, redeFiltro]);
 
   // Estilos para os selects e botão usando useMemo para evitar re-criação
+  // Agora os estilos são definidos por classes CSS para responsividade
   const selectBaseStyle = useMemo(() => (isHover: boolean) => ({
     background: isHover ? corInputHover : corInput,
     color: "#fff",
@@ -312,6 +316,7 @@ export default function MapPage() {
       <Map pontos={pontosFiltrados} />
       {/* Filtros suspensos na parte de baixo */}
       <div
+        className="filtros-bar"
         style={{
           position: "fixed",
           bottom: 0,
@@ -330,6 +335,7 @@ export default function MapPage() {
       >
         {/* Bairro */}
         <select
+          className="filtro-select"
           value={bairroFiltro || ""}
           onChange={e => setBairroFiltro(e.target.value || null)}
           style={selectBaseStyle(hoverInput === "bairro")}
@@ -343,6 +349,7 @@ export default function MapPage() {
         </select>
         {/* Discipulado */}
         <select
+          className="filtro-select"
           value={discipuladoFiltro || ""}
           onChange={e => setDiscipuladoFiltro(e.target.value || null)}
           style={selectBaseStyle(hoverInput === "discipulado")}
@@ -356,6 +363,7 @@ export default function MapPage() {
         </select>
         {/* Público Alvo */}
         <select
+          className="filtro-select"
           value={publicoAlvoFiltro || ""}
           onChange={e => setPublicoAlvoFiltro(e.target.value || null)}
           style={selectBaseStyle(hoverInput === "publicoAlvo")}
@@ -369,6 +377,7 @@ export default function MapPage() {
         </select>
         {/* Dia da Semana */}
         <select
+          className="filtro-select"
           value={diaSemanaFiltro || ""}
           onChange={e => setDiaSemanaFiltro(e.target.value || null)}
           style={selectBaseStyle(hoverInput === "diaSemana")}
@@ -382,6 +391,7 @@ export default function MapPage() {
         </select>
         {/* Rede */}
         <select
+          className="filtro-select"
           value={redeFiltro || ""}
           onChange={e => setRedeFiltro(e.target.value || null)}
           style={selectBaseStyle(hoverInput === "rede")}
@@ -395,6 +405,7 @@ export default function MapPage() {
         </select>
         {/* Botão para limpar filtros */}
         <button
+          className="filtro-btn"
           onClick={limparFiltros}
           style={buttonStyle(hoverBotao)}
           onMouseEnter={() => setHoverBotao(true)}
@@ -403,46 +414,183 @@ export default function MapPage() {
           Limpar filtros
         </button>
       </div>
-      {/* Gabarito de cores no canto inferior esquerdo */}
-      <div
+      {/* Botão para abrir o modal do gabarito de cores */}
+      <button
+        className="gabarito-modal-btn"
+        aria-label="Abrir gabarito de cores"
+        onClick={() => setGabaritoAberto(true)}
         style={{
           position: "fixed",
           bottom: 24,
           left: 24,
-          zIndex: 10000,
-          background: "rgba(30,30,30,0.95)",
-          borderRadius: "12px",
-          boxShadow: "0 2px 12px rgba(0,0,0,0.18)",
-          padding: "16px 20px",
-          minWidth: 180,
-          color: "#fff",
-          fontSize: "1rem",
-          fontWeight: 500,
+          zIndex: 10001,
+          width: 48,
+          height: 48,
+          borderRadius: "50%",
+          background: "rgba(30,30,30,0.55)",
+          border: "none",
           display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          alignItems: "flex-start"
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
+          cursor: "pointer",
+          transition: "background 0.2s"
         }}
       >
-        <div style={{ fontWeight: 700, fontSize: "1.08rem", marginBottom: 4, letterSpacing: 0.5 }}>Gabarito de Cores</div>
-        {gabaritoCores.map(({ cor, nome }) => (
-          <div key={nome} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span
-              style={{
-                display: "inline-block",
-                width: 22,
-                height: 22,
-                borderRadius: "50%",
-                background: cor,
-                border: "2px solid #fff",
-                marginRight: 8,
-                boxShadow: "0 1px 4px rgba(0,0,0,0.18)"
-              }}
-            />
-            <span style={{ color: "#fff", fontWeight: 500 }}>{nome}</span>
+        <i className="fas fa-clipboard-list" style={{ color: "#fff", fontSize: 22, opacity: 0.85 }} />
+      </button>
+      {/* Modal do gabarito de cores */}
+      {gabaritoAberto && (
+        <div className="gabarito-modal-overlay" onClick={() => setGabaritoAberto(false)}>
+          <div
+            className="gabarito-modal"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="gabarito-modal-header">
+              <span style={{ fontWeight: 700, fontSize: "1.08rem", letterSpacing: 0.5 }}>Gabarito de Cores</span>
+              <button
+                className="gabarito-modal-close"
+                onClick={() => setGabaritoAberto(false)}
+                aria-label="Fechar"
+              >
+                <i className="fas fa-times" />
+              </button>
+            </div>
+            <div className="gabarito-modal-list">
+              {gabaritoCores.map(({ cor, nome }) => (
+                <div key={nome} className="gabarito-item" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span
+                    className="gabarito-bolinha"
+                    style={{
+                      display: "inline-block",
+                      width: 22,
+                      height: 22,
+                      borderRadius: "50%",
+                      background: cor,
+                      border: "2px solid #fff",
+                      marginRight: 8,
+                      boxShadow: "0 1px 4px rgba(0,0,0,0.18)"
+                    }}
+                  />
+                  <span style={{ color: "#fff", fontWeight: 500 }}>{nome}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
+      {/* CSS para responsividade dos filtros, botão e modal do gabarito */}
+      <style>
+        {`
+          @media (max-width: 900px), (max-height: 500px), (orientation: landscape) and (max-width: 900px) {
+            .filtros-bar {
+              gap: 6px !important;
+              padding: 8px 2px !important;
+            }
+            .filtro-select {
+              font-size: 0.82rem !important;
+              padding: 5px 8px !important;
+              min-width: 80px !important;
+              border-radius: 5px !important;
+              margin-right: 4px !important;
+            }
+            .filtro-btn {
+              font-size: 0.82rem !important;
+              padding: 5px 10px !important;
+              border-radius: 5px !important;
+              margin-left: 4px !important;
+            }
+            .gabarito-modal-btn {
+              width: 36px !important;
+              height: 36px !important;
+              left: auto !important;
+              right: 58px !important;
+              bottom: auto !important;
+              top: 12px !important;
+              font-size: 1.1rem !important;
+            }
+            .gabarito-modal {
+              min-width: 160px !important;
+              max-width: 90vw !important;
+              padding: 10px 12px !important;
+              border-radius: 8px !important;
+              font-size: 0.82rem !important;
+            }
+            .gabarito-modal-header span {
+              font-size: 0.92rem !important;
+            }
+            .gabarito-bolinha {
+              width: 14px !important;
+              height: 14px !important;
+              margin-right: 4px !important;
+            }
+            .gabarito-item {
+              gap: 5px !important;
+            }
+          }
+          .gabarito-modal-btn {
+            transition: background 0.2s;
+          }
+          .gabarito-modal-btn:hover {
+            background: rgba(30,30,30,0.85);
+          }
+          .gabarito-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.32);
+            z-index: 10002;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .gabarito-modal {
+            background: rgba(30,30,30,0.98);
+            border-radius: 12px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.22);
+            padding: 18px 24px;
+            min-width: 220px;
+            max-width: 96vw;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+            position: relative;
+            animation: gabaritoModalIn 0.18s;
+          }
+          @keyframes gabaritoModalIn {
+            0% { opacity: 0; transform: scale(0.95);}
+            100% { opacity: 1; transform: scale(1);}
+          }
+          .gabarito-modal-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+          }
+          .gabarito-modal-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            margin-left: 12px;
+          }
+          .gabarito-modal-close:hover {
+            opacity: 1;
+          }
+          .gabarito-modal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+          }
+        `}
+      </style>
     </div>
   );
 }

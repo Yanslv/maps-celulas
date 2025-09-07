@@ -83,7 +83,7 @@ export default function Map({ pontos }: MapProps) {
     // Cria o mapa apenas uma vez
     if (!mapInstanceRef.current) {
       mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
-        zoom: 13,
+        zoom: 16,
         center: { lat: -15.646670, lng: -56.132500 },
         styles: [
           {
@@ -125,14 +125,14 @@ export default function Map({ pontos }: MapProps) {
         const imgContainer = document.createElement("div");
         imgContainer.style.position = "relative";
         imgContainer.style.display = "inline-block";
-        imgContainer.style.width = "50px";
-        imgContainer.style.height = "50px";
+        imgContainer.style.width = "40px"; // 50 * 0.8 = 40
+        imgContainer.style.height = "40px"; // 50 * 0.8 = 40
 
         // Círculo com foto dentro e borda colorida
         const img = document.createElement("div");
-        img.style.width = "50px";
-        img.style.height = "50px";
-        img.style.border = `3px solid`;
+        img.style.width = "40px";
+        img.style.height = "40px";
+        img.style.border = `2.4px solid`; // 3 * 0.8 = 2.4
         img.style.borderRadius = "50%";
         img.style.backgroundSize = "cover";
         img.style.backgroundPosition = "center";
@@ -151,13 +151,13 @@ export default function Map({ pontos }: MapProps) {
         // Bolinha colorida no canto superior direito, por cima da imagem
         const bolinha = document.createElement("div");
         bolinha.style.position = "absolute";
-        bolinha.style.top = "2px";
-        bolinha.style.right = "2px";
-        bolinha.style.width = "16px";
-        bolinha.style.height = "16px";
+        bolinha.style.top = "1.6px"; // 2 * 0.8 = 1.6
+        bolinha.style.right = "1.6px"; // 2 * 0.8 = 1.6
+        bolinha.style.width = "12.8px"; // 16 * 0.8 = 12.8
+        bolinha.style.height = "12.8px"; // 16 * 0.8 = 12.8
         bolinha.style.borderRadius = "50%";
         bolinha.style.background = corBorda;
-        bolinha.style.border = "2px solid #fff";
+        bolinha.style.border = "1.6px solid #fff"; // 2 * 0.8 = 1.6
         bolinha.style.zIndex = "2";
         bolinha.style.boxShadow = "0 0 0 0 rgba(0,0,0,0.2)";
 
@@ -175,7 +175,7 @@ export default function Map({ pontos }: MapProps) {
                 transform: scale(1);
               }
               70% {
-                box-shadow: 0 0 0 10px rgba(0,0,0,0);
+                box-shadow: 0 0 0 8px rgba(0,0,0,0); /* 10 * 0.8 = 8 */
                 transform: scale(1.2);
               }
               100% {
@@ -195,10 +195,10 @@ export default function Map({ pontos }: MapProps) {
         if (ponto.nome_lider) {
           const label = document.createElement("div");
           label.innerText = ponto.nome_lider;
-          label.style.fontSize = "12px";
+          label.style.fontSize = "9.6px"; // 12 * 0.8 = 9.6
           label.style.fontWeight = "bold";
           label.style.color = "black";
-          label.style.marginTop = "4px";
+          label.style.marginTop = "3.2px"; // 4 * 0.8 = 3.2
           div.appendChild(label);
         }
 
@@ -209,50 +209,50 @@ export default function Map({ pontos }: MapProps) {
 
         const infoWindow = new window.google.maps.InfoWindow({
           content: `
-            <div style="max-width:340px;">
-              <div style="display: flex; justify-content: center; align-items: center; box-shadow: inset 0 2px 16px rgba(0,0,0,0.53); border-radius: 24px; padding: 24px; background: #fff; margin-bottom: 16px; border: 5px solid ${corBordaInfo};">
-                <img src="${fotoUrl}" alt="foto" style="width:140px; height:140px; object-fit:contain;" />
+            <div style="max-width:272px;">
+              <div style="display: flex; justify-content: center; align-items: center; box-shadow: inset 0 1.6px 12.8px rgba(0,0,0,0.53); border-radius: 19.2px; padding: 19.2px; background: #fff; margin-bottom: 12.8px; border: 4px solid ${corBordaInfo};">
+                <img src="${fotoUrl}" alt="foto" style="width:112px; height:112px; object-fit:cover; border-radius: 50%; border: 3.2px solid #e0e0e0; background: #fafafa;" />
               </div>
-              <h3 style="margin:0; font-size:28px; font-weight: bold; color: #000;">${ponto.nome_lider || ""}</h3>
-              <span style="margin:8px 0; font-size:22px; font-weight: 400; color: #161616; display: block; text-align: left;">
+              <h3 style="margin:0; font-size:22.4px; font-weight: bold; color: #000;">${ponto.nome_lider || ""}</h3>
+              <span style="margin:6.4px 0; font-size:17.6px; font-weight: 400; color: #161616; display: block; text-align: left;">
                 <span style="font-weight: bold;">Célula:</span> ${ponto.nome_celula || "Não informado"}
               </span>
-              <span style="margin:8px 0; font-size:22px; font-weight: 400; color: #161616; display: block; text-align: left;">
+              <span style="margin:6.4px 0; font-size:17.6px; font-weight: 400; color: #161616; display: block; text-align: left;">
                 <span style="font-weight: bold;">Rede:</span> ${ponto.rede || "Não informado"}
               </span>
-              <span style="margin:8px 0; font-size:22px; font-weight: 400; color: #161616; display: block; text-align: left;">
+              <span style="margin:6.4px 0; font-size:17.6px; font-weight: 400; color: #161616; display: block; text-align: left;">
                 <span style="font-weight: bold;">Discipulado:</span> ${ponto.discipulado || "Não informado"}
               </span>
-              <span style="margin:8px 0; font-size:22px; font-weight: 400; color: #161616; display: block; text-align: left;">
+              <span style="margin:6.4px 0; font-size:17.6px; font-weight: 400; color: #161616; display: block; text-align: left;">
                 <span style="font-weight: bold;">Público Alvo:</span> ${ponto.publico_alvo || "Não informado"}
               </span>
-              <span style="margin:8px 0; font-size:22px; font-weight: 400; color: #161616; display: block; text-align: left;">
+              <span style="margin:6.4px 0; font-size:17.6px; font-weight: 400; color: #161616; display: block; text-align: left;">
                 <span style="font-weight: bold;">Dia da Semana:</span> ${ponto.dia_da_semana || "Não informado"}
               </span>
-              <span style="margin:8px 0; font-size:22px; font-weight: 400; color: #161616; display: block; text-align: left;">
+              <span style="margin:6.4px 0; font-size:17.6px; font-weight: 400; color: #161616; display: block; text-align: left;">
                 <span style="font-weight: bold;">Celular do Líder:</span> ${ponto.celular_lider || "Não informado"}
               </span>
-              <span style="margin:8px 0; font-size:22px; font-weight: 400; color: #161616; display: block; text-align: left;">
+              <span style="margin:6.4px 0; font-size:17.6px; font-weight: 400; color: #161616; display: block; text-align: left;">
                 <span style="font-weight: bold;">Horário:</span> ${ponto.horario || "Não informado"}
               </span>
-              <span style="margin:8px 0; font-size:22px; font-weight: 400; color: #161616; display: block; text-align: left;">
+              <span style="margin:6.4px 0; font-size:17.6px; font-weight: 400; color: #161616; display: block; text-align: left;">
                 <span style="font-weight: bold;">Bairro:</span> ${ponto.bairro || "Não informado"}
               </span>
-              <div style="margin-top:24px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between;">
-                <div style="display: flex; flex-direction: row; gap: 16px; width: 100%;">
+              <div style="margin-top:19.2px; display: flex; flex-wrap: wrap; gap: 12.8px; justify-content: space-between;">
+                <div style="display: flex; flex-direction: row; gap: 12.8px; width: 100%;">
                   <button id="btnCopiarInfo" title="Copiar informações"
-                          style="padding:20px 0; border:none; border-radius:14px;
-                                background:#6c757d; color:#fff; cursor:pointer; display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center; font-size: 22px;">
+                          style="padding:16px 0; border:none; border-radius:11.2px;
+                                background:#6c757d; color:#fff; cursor:pointer; display: flex; align-items: center; gap: 9.6px; width: 100%; justify-content: center; font-size: 17.6px;">
                     <i class="fa fa-copy" aria-hidden="true"></i>
                   </button>
                   <button id="btnWhatsapp" title="WhatsApp do Líder"
-                          style="padding:20px 0; border:none; border-radius:14px;
-                                background:#25d366; color:#fff; cursor:pointer; display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center; font-size: 22px;">
+                          style="padding:16px 0; border:none; border-radius:11.2px;
+                                background:#25d366; color:#fff; cursor:pointer; display: flex; align-items: center; gap: 9.6px; width: 100%; justify-content: center; font-size: 17.6px;">
                     <i class="fab fa-whatsapp" aria-hidden="true"></i>
                   </button>
                   <button id="btnCompartilhar" title="Compartilhar Localização"
-                          style="padding:20px 0; border:none; border-radius:14px;
-                                background:#ff9800; color:#fff; cursor:pointer; display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center; font-size: 22px;">
+                          style="padding:16px 0; border:none; border-radius:11.2px;
+                                background:#ff9800; color:#fff; cursor:pointer; display: flex; align-items: center; gap: 9.6px; width: 100%; justify-content: center; font-size: 17.6px;">
                     <i class="fa fa-share-alt" aria-hidden="true"></i>
                   </button>
                 </div>
