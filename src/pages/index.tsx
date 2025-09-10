@@ -305,7 +305,7 @@ export default function MapPage() {
           zIndex: 10,
           backdropFilter: "blur(2px)"
         }}>
-          Desenvolvido por <b>Yan Amorim</b> - Tech | UI inspirada em mapas e localização | Videira 2024
+          Desenvolvido por <b>Yan Amorim</b> - Tech | UI inspirada em mapas e localização 
         </footer>
       </div>
     );
@@ -320,8 +320,9 @@ export default function MapPage() {
         style={{
           position: "fixed",
           bottom: 0,
-          left: 0,
-          width: "100%",
+          width: "60%",
+          left: "50%",
+          transform: "translateX(-50%)",
           background: "transparent",
           boxShadow: "none",
           zIndex: 9999, // z-index bem alto para garantir que fique sobre o mapa
@@ -486,6 +487,10 @@ export default function MapPage() {
             .filtros-bar {
               gap: 6px !important;
               padding: 8px 2px !important;
+              width: 100% !important;
+              left: 0 !important;
+              right: 0 !important;
+              transform: none !important;
             }
             .filtro-select {
               font-size: 0.82rem !important;
