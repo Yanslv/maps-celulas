@@ -296,12 +296,10 @@ export default function Map({ pontos }: MapProps) {
             const btnWhatsapp = document.getElementById("btnWhatsapp");
             if (btnWhatsapp && ponto.celular_lider) {
               btnWhatsapp.onclick = () => {
-                // Remove caracteres não numéricos do telefone
-                const numero = ponto.celular_lider!.replace(/\D/g, "");
                 const texto = encodeURIComponent(
                   `Olá ${ponto.nome_lider || ""}, gostaria de saber mais sobre a célula "${ponto.nome_celula || ""}".`
                 );
-                window.open(`https://wa.me/55${numero}?text=${texto}`, "_blank");
+                window.open(`https://wa.me/55${ponto.celular_lider}?text=${texto}`, "_blank");
               };
             } else if (btnWhatsapp) {
               btnWhatsapp.onclick = () => {
